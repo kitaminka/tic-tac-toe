@@ -1,0 +1,19 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kitaminka/TicTacToe.git"
+  },
+  "author": "Kitam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kitaminka/TicTacToe/issues"
+  },
+  "homepage": "https://github.com/Kitaminka/TicTacToe#readme"
+}
