@@ -6,9 +6,9 @@ module.exports = {
         const uri = 'http://127.0.0.1/users/auth/';
 
         const params = new URLSearchParams();
-        params.append('client_id', '815550306351710238');
+        params.append('client_id', process.env.CLIENT_ID);
         params.append('grant_type', 'authorization_code');
-        params.append('client_secret', 'zgpuHBkzdQRhsaOn0oulXIFJvw7YoU1l');
+        params.append('client_secret', process.env.CLIENT_SECRET);
         params.append('code', req.query.code);
         params.append('redirect_uri', uri);
 
@@ -26,7 +26,7 @@ module.exports = {
                 'Authorization':`${data.token_type} ${data.access_token}`
             }
         }).then((res) => res.json());
-        console.log(user);
+        req.session.username = `${user.username}#${user.discriminator}`;
         res.redirect('/');
     },
     getUsers(req, res) {

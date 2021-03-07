@@ -1,5 +1,6 @@
 module.exports = {
     auth(req, res){
-        res.render('auth');
+        if (!req.session.username) return res.render('auth');
+        else res.send(`Authorized as ${req.session.username}`);
     }
 }
