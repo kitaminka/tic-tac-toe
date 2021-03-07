@@ -28,8 +28,5 @@ module.exports = {
         }).then((res) => res.json());
         req.session.username = `${user.username}#${user.discriminator}`;
         res.redirect('/');
-    },
-    getUsers(req, res) {
-        res.send('Список пользователей');
     }
 }
