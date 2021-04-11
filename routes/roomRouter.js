@@ -2,7 +2,7 @@ const express = require('express');
 const roomController = require('../controllers/roomController');
 
 const roomRouter = express.Router();
-
+// TODO Add user authorization check
 roomRouter.get('/', (req, res) => {
     if (req.session.user) return roomController.getRooms(req, res);
     else return res.redirect('/');

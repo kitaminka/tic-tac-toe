@@ -4,6 +4,7 @@ const userModule = require('../modules/userModule');
 module.exports = {
     async createRoom(req, res) {
         try {
+            // TODO Add roomId to user
             await Room.create({
                 owner: req.session.user.id,
                 members: [req.session.user.id],

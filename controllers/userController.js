@@ -4,6 +4,7 @@ const userModule = require('../modules/userModule');
 
 module.exports = {
     async authUser(req, res) {
+        // TODO Fix bug with authorization when user is not created
         const uri = 'http://127.0.0.1/users/auth/';
 
         const params = new URLSearchParams();
