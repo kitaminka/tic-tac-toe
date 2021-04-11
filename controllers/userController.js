@@ -1,8 +1,9 @@
 const fetch = require('node-fetch');
+const User = require('../models/user');
+const userModule = require('../modules/userModule');
 
 module.exports = {
     async authUser(req, res) {
-        if (!req.query.code) return res.status(403).send('Forbidden');
         const uri = 'http://127.0.0.1/users/auth/';
 
         const params = new URLSearchParams();
@@ -26,7 +27,24 @@ module.exports = {
                 'Authorization':`${data.token_type} ${data.access_token}`
             }
         }).then((res) => res.json());
-        req.session.username = `${user.username}#${user.discriminator}`;
-        res.redirect('/');
+        user.nickname = `${user.username}#${user.discriminator}`;
+        req.session.user = await this.updateUser(req, res, user);
+        return res.redirect('/game');
+    },
+    async updateUser(req, res, user) {
+        const result = await userModule.updateUser(user);
+        if (!result) return this.creteUser(req, res, user);
+        else return result;
+    },
+    async creteUser(req, res, user) {
+        return User.create({
+            nickname: user.nickname,
+            avatar: user.avatar,
+            id: user.id,
+            sessionId: req.sessionID
+        });
+    },
+    async getUser(id) {
+        return userModule.getUser(id);
     }
 }

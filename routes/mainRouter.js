@@ -4,8 +4,8 @@ const mainController = require('../controllers/mainController.js');
 const homeRouter = express.Router();
 
 homeRouter.get('/', (req, res) => {
-    if (req.session.username) mainController.homePage(req, res);
-    else mainController.authPage(req, res);
+    if (!req.session.user) return mainController.authPage(req, res);
+    else return res.redirect('/game');
 });
 
 module.exports = homeRouter;
