@@ -13,8 +13,11 @@ roomRouter.get('/', (req, res) => {
 roomRouter.put('/', (req, res) => {
     return roomController.createRoom(req, res);
 });
-roomRouter.get('/:id', (req, res) => {
+roomRouter.post('/:id', (req, res) => {
     return roomController.joinRoom(req, res);
+});
+roomRouter.delete('/:id', (req, res) => {
+    return roomController.deleteRoom(req, res);
 });
 
 module.exports = roomRouter;

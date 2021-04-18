@@ -4,29 +4,22 @@ const userModule = require('../modules/userModule');
 
 module.exports = {
     async createRoom(req, res) {
-        try {
-            const room = await Room.create({
-                owner: req.session.user.id,
-                members: [req.session.user.id],
-                private: req.query.private
-            });
-            await User.findOneAndUpdate({
-                id: req.session.user.id
-            }, {
-                $set: {
-                    roomId: room._id
-                }
-            });
-            return res.send({
-                success: true,
-                status: 'Room created'
-            });
-        } catch (err) {
-            return res.send({
-                success: false,
-                error: 'Error occurred'
-            });
-        }
+        const room = await Room.create({
+            owner: req.session.user.id,
+            members: [req.session.user.id],
+            private: req.query.private
+        });
+        await User.findOneAndUpdate({
+            id: req.session.user.id
+        }, {
+            $set: {
+                roomId: room._id
+            }
+        });
+        return res.send({
+            success: true,
+            status: 'Room created'
+        });
     },
     async getRooms(req, res) {
         return res.send(await Room.find({
@@ -36,7 +29,7 @@ module.exports = {
     async joinRoom(req, res) {
         const user = await userModule.getUser(req.session.user.id);
         if (user.roomId) {
-            return res.send({
+            return res.status(409).send({
                 success: false,
                 error: 'User already joined room'
             });
@@ -54,10 +47,15 @@ module.exports = {
                 status: 'User joined room'
             });
         } catch (err) {
-            return res.send({
+            return res.status(404).send({
                 success: false,
                 error: 'Invalid room id'
             });
         }
+    },
+    async deleteRoom(req, res) {
+        const room = await Room.findById(req.params.id);
+        if (room.owner === req.session.user.id) Room.findByIdAndDelete(req.params.id);
+        else res.status(403).send('Forbidden');
     }
 }
