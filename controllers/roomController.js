@@ -1,14 +1,21 @@
 const Room = require('../models/room');
+const User = require('../models/user');
 const userModule = require('../modules/userModule');
 
 module.exports = {
     async createRoom(req, res) {
         try {
-            // TODO Add roomId to user
-            await Room.create({
+            const room = await Room.create({
                 owner: req.session.user.id,
                 members: [req.session.user.id],
                 private: req.query.private
+            });
+            await User.findOneAndUpdate({
+                id: req.session.user.id
+            }, {
+                $set: {
+                    roomId: room._id
+                }
             });
             return res.send({
                 success: true,
