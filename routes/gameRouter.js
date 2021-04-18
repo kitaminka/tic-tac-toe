@@ -3,9 +3,12 @@ const gameController = require('../controllers/gameController');
 
 const gameRouter = express.Router();
 
+gameRouter.use((req, res, next) => {
+    if (!req.session.user) return res.redirect('/');
+    else return next();
+});
 gameRouter.get('/', (req, res) => {
-    if (req.session.user) return gameController.homePage(req, res);
-    else return res.redirect('/');
+    return gameController.homePage(req, res);
 });
 
 module.exports = gameRouter;
