@@ -55,7 +55,21 @@ module.exports = {
     },
     async deleteRoom(req, res) {
         const room = await Room.findById(req.params.id);
-        if (room.owner === req.session.user.id) Room.findByIdAndDelete(req.params.id);
-        else res.status(403).send('Forbidden');
+        if (room.owner === req.session.user.id) {
+            try {
+                await Room.findByIdAndDelete(req.params.id);
+                return res.send({
+                    success: true,
+                    status: 'Room deleted'
+                });
+            } catch (err) {
+                return res.send({
+                    success: false,
+                    status: 'Invalid room id'
+                });
+            }
+        } else {
+            return res.status(403).send('Forbidden');
+        }
     }
 }
