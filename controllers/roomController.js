@@ -34,8 +34,15 @@ module.exports = {
                 error: 'User already joined room'
             });
         }
+        const members = (await Room.findById(req.params.id)).members;
+        if (members.length === 2) {
+            return res.status(403).send({
+                success: false,
+                error: 'Room is full'
+            });
+        }
         try {
-            await Room.findByIdAndUpdate(req.params.id, {
+            const room = await Room.findByIdAndUpdate(req.params.id, {
                 $push: {
                     members: req.session.user.id,
                 }

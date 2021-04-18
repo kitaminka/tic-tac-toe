@@ -10,12 +10,10 @@ const RoomSchema = new mongoose.Schema({
     members: {
         type: Array,
         required: true,
-        minlength: 1,
     },
     private: {
         type: Boolean,
         required: true,
-        minlength: 1,
         default: false
     }
 }, {
