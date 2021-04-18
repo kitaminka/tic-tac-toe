@@ -2,18 +2,19 @@ const express = require('express');
 const roomController = require('../controllers/roomController');
 
 const roomRouter = express.Router();
-// TODO Add user authorization check
+
+roomRouter.use((req, res, next) => {
+   if (!req.session.user) return res.status(403).send('Forbidden');
+   else return next();
+});
 roomRouter.get('/', (req, res) => {
-    if (req.session.user) return roomController.getRooms(req, res);
-    else return res.redirect('/');
+    return roomController.getRooms(req, res);
 });
 roomRouter.put('/', (req, res) => {
-    if (req.session.user) return roomController.createRoom(req, res);
-    else return res.redirect('/');
+    return roomController.createRoom(req, res);
 });
 roomRouter.get('/:id', (req, res) => {
-    if (req.session.user) return roomController.joinRoom(req, res);
-    else return res.redirect('/');
+    return roomController.joinRoom(req, res);
 });
 
 module.exports = roomRouter;

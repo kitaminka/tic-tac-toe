@@ -41,19 +41,19 @@ module.exports = {
                 error: 'User already joined room'
             });
         }
-        const room = await Room.findByIdAndUpdate(req.params.id, {
-            $push: {
-                members: req.session.user.id,
-            }
-        });
-        if (room) {
+        try {
+            await Room.findByIdAndUpdate(req.params.id, {
+                $push: {
+                    members: req.session.user.id,
+                }
+            });
             req.session.user.roomId = room._id;
             await userModule.updateUser(req.session.user);
             return res.send({
                 success: true,
                 status: 'User joined room'
             });
-        } else {
+        } catch (err) {
             return res.send({
                 success: false,
                 error: 'Invalid room id'
