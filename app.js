@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
@@ -17,6 +18,9 @@ mongoose.connect(process.env.MONGO_URL, {
 });
 
 const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+require('./modules/socketModule')(io);
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
@@ -44,4 +48,4 @@ app.use((req, res) => {
     res.status(404).send('Not Found');
 });
 
-app.listen(80);
+server.listen(80);

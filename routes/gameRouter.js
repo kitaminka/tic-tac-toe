@@ -10,5 +10,8 @@ gameRouter.use((req, res, next) => {
 gameRouter.get('/', (req, res) => {
     return gameController.homePage(req, res);
 });
+gameRouter.get('/:id', (req, res) => {
+    return gameController.roomPage(req, res);
+});
 
 module.exports = gameRouter;
