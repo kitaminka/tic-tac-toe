@@ -19,6 +19,7 @@ mongoose.connect(process.env.MONGO_URL, {
 const app = express();
 app.set('view engine', 'ejs');
 
+app.use(express.static('public'));
 app.use(session({
     key: 'session',
     secret: process.env.SESSION_SECRET,
