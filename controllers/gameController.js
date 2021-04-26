@@ -1,12 +1,16 @@
 module.exports = {
     homePage(req, res) {
         return res.render('home', {
-            username: req.session.user.nickname
+            nickname: req.session.user.nickname,
+            avatar: req.session.user.avatar,
+            id: req.session.user.id
         });
     },
     roomPage(req, res) {
         return res.render('room', {
-            username: req.session.user.nickname
+            nickname: req.session.user.nickname,
+            avatar: req.session.user.avatar,
+            id: req.session.user.id
         });
     }
 }

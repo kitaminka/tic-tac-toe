@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded",async () => {
     const result = await fetch(`/rooms/${roomId}`, {
         method: 'POST'
     }).then(res => res.json());
-    if (!result.success) window.location.href = 'http://127.0.0.1/game';
-    const socket = io.connect();
+    if (!result.success) {
+        window.location.href = 'http://127.0.0.1/game';
+    }
+    else {
+        const socket = io.connect();
+    }
 });
