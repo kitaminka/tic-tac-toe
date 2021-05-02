@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded",async () => {
             const owner = await fetch(`/users/${room.owner}`, {
                 method: 'GET'
             }).then(res => res.json());
-            roomList.innerHTML += `<li><a href="/game/${room._id}">Room ID: ${room._id} Owner: ${owner.nickname}</a></li>`
+            roomList.innerHTML += `<li class="list__item"><a href="/game/${room._id}">Room ID: ${room._id} Owner: ${owner.nickname}</a></li>`
         }
     }
 });

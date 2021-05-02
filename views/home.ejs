@@ -4,13 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/home.css">
     <script src="../js/home.js"></script>
     <title>TicTacToe</title>
 </head>
 <body>
-    <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png" alt="">
-    <%= nickname%>
-    <p>Home</p>
-    <ul id="roomList"></ul>
+    <header>
+        <nav class="header__nav">
+            <ul class="nav__menu">
+                <li class="menu__item">
+                    <a href="/game">Home</a>
+                </li>
+                <li class="menu__item">
+                    <a href="#">About</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="main__profile">
+            <div class="profile__avatar">
+                <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png" alt="">
+            </div>
+            <div class="profile__nickname">
+                <%= nickname%>
+            </div>
+        </div>
+        <div class="main__rooms">
+            <h3>Room List</h3>
+            <ul id="roomList" class="rooms__list"></ul>
+        </div>
+    </main>
+    <footer>
+        <ul class="footer__links">
+            <li class="links__item">
+                <a href="https://github.com/Kitaminka/TicTacToe">GitHub repository</a>
+            </li>
+            <li class="links__item">
+                <a href="https://github.com/Kitaminka/">Github profile</a>
+            </li>
+        </ul>
+    </footer>
 </body>
 </html>
