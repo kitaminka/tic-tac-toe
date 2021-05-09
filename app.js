@@ -3,6 +3,10 @@ const http = require('http');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
+const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server);
+require('./modules/socketModule')(io);
 require('dotenv').config();
 
 const userRouter = require('./routes/userRouter');
@@ -17,14 +21,7 @@ mongoose.connect(process.env.MONGO_URL, {
     useFindAndModify: false
 });
 
-const app = express();
-const server = http.createServer(app);
-const io = require('socket.io')(server);
-require('./modules/socketModule')(io);
-app.set('view engine', 'ejs');
-
-app.use(express.static('public'));
-app.use(session({
+const sessionMiddleware = session({
     key: 'session',
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
@@ -37,7 +34,16 @@ app.use(session({
             useUnifiedTopology: true
         }
     })
-}));
+});
+
+io.use((socket, next) => {
+    sessionMiddleware(socket.request, socket.request.res, next);
+});
+
+app.set('view engine', 'ejs');
+
+app.use(sessionMiddleware);
+app.use(express.static('public'));
 
 app.use('/users', userRouter);
 app.use('/rooms', roomRouter);

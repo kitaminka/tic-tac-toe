@@ -24,10 +24,6 @@ const RoomSchema = new mongoose.Schema({
         minlength: 24,
         maxlength: 24,
         default: null
-    },
-    socketId: {
-        type: String,
-        default: null
     }
 }, {
     versionKey: false
