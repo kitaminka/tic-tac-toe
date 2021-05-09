@@ -4,7 +4,13 @@ const userModule = require('../modules/userModule');
 
 module.exports = {
     async createRoom(req, res) {
-        // TODO Fix many rooms creating
+        const user = await userModule.getUser(req.session.user.id);
+        if (user.roomId) {
+            return res.status(409).send({
+                success: false,
+                error: 'User already joined room'
+            });
+        }
         const room = await Room.create({
             owner: req.session.user.id,
             members: [req.session.user.id],
