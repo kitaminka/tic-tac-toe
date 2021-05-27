@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded",async () => {
     }).then(res => res.json());
     if (!result.success) {
         window.location.href = 'http://127.0.0.1/game';
-    }
-    else {
+    } else {
         const socket = io.connect();
     }
 });

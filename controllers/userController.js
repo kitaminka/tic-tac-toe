@@ -21,14 +21,16 @@ module.exports = {
             }
         }).then((res) => res.json());
 
-        const user = await fetch(`https://discord.com/api/v8/users/@me`, {
+        const userInfo = await fetch(`https://discord.com/api/v8/users/@me`, {
             method: 'GET',
             headers: {
                 'Authorization':`${data.token_type} ${data.access_token}`
             }
         }).then((res) => res.json());
-        user.nickname = `${user.username}#${user.discriminator}`;
-        req.session.user = await this.updateUser(req, res, user);
+        userInfo.nickname = `${userInfo.username}#${userInfo.discriminator}`;
+        userInfo.accessToken = `${data.token_type} ${data.access_token}`;
+        req.session.user = await this.updateUser(req, res, userInfo);
+        console.log(req.session.user)
         return res.redirect('/game');
     },
     async updateUser(req, res, user) {
@@ -36,15 +38,31 @@ module.exports = {
         if (!result) return this.creteUser(req, res, user);
         else return result;
     },
+    async updateUserInfo(req, res) {
+        const user = await User.findOne({
+            id: req.session.user.id
+        });
+        const userInfo = await fetch(`https://discord.com/api/v8/users/@me`, {
+            method: 'GET',
+            headers: {
+                'Authorization': user.accessToken
+            }
+        }).then((res) => res.json());
+        // Write user info update in db
+    },
     async creteUser(req, res, user) {
         return User.create({
             nickname: user.nickname,
             avatar: user.avatar,
             id: user.id,
-            sessionId: req.sessionID
+            accessToken: user.accessToken
         });
     },
     async getUser(req, res) {
-        return res.send(await userModule.getUser(req.params.id));
+        const user = await userModule.getUser(req.params.id);
+        if (user) return res.status(404).send({
+            success: false,
+            error: 'Invalid user id'
+        });
     }
 }

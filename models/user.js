@@ -24,6 +24,10 @@ const RoomSchema = new mongoose.Schema({
         minlength: 24,
         maxlength: 24,
         default: null
+    },
+    accessToken: {
+        type: String,
+        required: true
     }
 }, {
     versionKey: false

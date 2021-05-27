@@ -71,7 +71,16 @@ module.exports = {
         const room = await Room.findById(req.params.id);
         if (room.owner === req.session.user.id) {
             try {
-                await Room.findByIdAndDelete(req.params.id);
+                const room = await Room.findByIdAndDelete(req.params.id);
+                for (const userId of room.members) {
+                    await User.findOneAndUpdate({
+                        id: userId
+                    }, {
+                        $set: {
+                            roomId: null
+                        }
+                    });
+                }
                 return res.send({
                     success: true,
                     status: 'Room deleted'
