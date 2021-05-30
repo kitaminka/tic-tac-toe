@@ -1,11 +1,16 @@
 const express = require('express');
 const userController = require('../controllers/userController');
+const userModule = require('../modules/userModule');
 
 const userRouter = express.Router();
 
 userRouter.get('/auth', (req, res) => {
+    // TODO Add success and error object
     if (req.query.code) return userController.authUser(req, res);
     else return res.status(400).send('Bad Request');
+});
+userRouter.use((req, res, next) => {
+    return userModule.updateSession(req, res, next);
 });
 userRouter.get('/update', (req, res) => {
     if (!req.session.user) return res.status(403).send('Forbidden');

@@ -5,6 +5,7 @@ const userModule = require('../modules/userModule');
 const roomRouter = express.Router();
 
 roomRouter.use((req, res, next) => {
+    // TODO Add success and error object
    if (!req.session.user) return res.status(403).send('Forbidden');
    else return next();
 });

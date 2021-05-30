@@ -30,7 +30,6 @@ module.exports = {
         userInfo.nickname = `${userInfo.username}#${userInfo.discriminator}`;
         userInfo.accessToken = `${data.token_type} ${data.access_token}`;
         req.session.user = await this.updateUser(req, res, userInfo);
-        console.log(req.session.user)
         return res.redirect('/game');
     },
     async updateUser(req, res, user) {
@@ -48,7 +47,17 @@ module.exports = {
                 'Authorization': user.accessToken
             }
         }).then((res) => res.json());
-        // Write user info update in db
+        await User.findOneAndUpdate({
+            id: req.session.user.id
+        }, {
+            $set: {
+                nickname: `${userInfo.username}#${userInfo.discriminator}`,
+                avatar: userInfo.avatar
+            }
+        });
+        return res.send({
+            success: true
+        });
     },
     async creteUser(req, res, user) {
         return User.create({
@@ -60,9 +69,10 @@ module.exports = {
     },
     async getUser(req, res) {
         const user = await userModule.getUser(req.params.id);
-        if (user) return res.status(404).send({
+        if (!user) return res.status(404).send({
             success: false,
             error: 'Invalid user id'
         });
+        else return res.send(user);
     }
 }

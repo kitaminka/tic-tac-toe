@@ -27,10 +27,13 @@
     <main>
         <div class="main__profile">
             <div class="profile__avatar">
-                <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png" alt="">
+                <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png">
             </div>
             <div class="profile__nickname">
                 <%= nickname%>
+            </div>
+            <div class="profile__update">
+                <img src="../img/update.png" class="update__button" id="updateButton" onclick="updateProfile()">
             </div>
         </div>
         <div class="main__rooms">

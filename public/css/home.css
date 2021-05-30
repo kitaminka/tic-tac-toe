@@ -15,6 +15,16 @@ main {
     align-items: center;
     justify-content: center;
 }
+.update__button {
+    width: 100px;
+    height: 100px;
+    background-color: #00296B;
+    border-radius: 15px;
+    margin-top: 10px;
+}
+.update__button:hover {
+    cursor: pointer;
+}
 .main__rooms {
     display: flex;
     flex-direction: column;

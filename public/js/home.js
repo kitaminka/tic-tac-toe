@@ -1,4 +1,10 @@
 'use strict'
+async function updateProfile () {
+    const result = await fetch('/users/update', {
+        method: 'GET'
+    }).then(res => res.json());
+    if (result.success) return location.reload();
+}
 document.addEventListener("DOMContentLoaded",async () => {
     const roomList = document.getElementById('roomList');
     const rooms = await fetch('/rooms/', {

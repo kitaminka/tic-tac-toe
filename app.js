@@ -51,7 +51,9 @@ app.use('/game', gameRouter);
 app.use('/', mainRouter);
 
 app.use((req, res) => {
-    res.status(404).send('Not Found');
+    return res.status(404).send('Not Found');
 });
 
 server.listen(80);
+
+// TODO Response format
