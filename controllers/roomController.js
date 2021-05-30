@@ -51,8 +51,8 @@ module.exports = {
         try {
             const room = await Room.findByIdAndUpdate(req.params.id, {
                 $push: {
-                    members: req.session.user.id,
-                }
+                    members: req.session.user.id
+                },
             });
             req.session.user.roomId = room._id;
             await userModule.updateUser(req.session.user);

@@ -8,5 +8,33 @@ document.addEventListener("DOMContentLoaded",async () => {
         window.location.href = 'http://127.0.0.1/game';
     } else {
         const socket = io.connect();
+        let turn;
+
+        socket.on('connect', () => {
+            console.log(socket.id)
+        });
+        socket.on('gameStart', (data) => {
+           if (data[0].socketId === socket.id) turn = data[0].turn;
+           else if (data[1].socketId === socket.id) turn = data[1].turn;
+           // TODO Add eventListener
+        });
+        socket.on('firstTurn', () => {
+            if (turn === 1) {
+                const buttons = document.getElementsByClassName('button');
+                for (const button of buttons) button.removeAttribute('disabled');
+            } else {
+                const buttons = document.getElementsByClassName('button');
+                for (const button of buttons) button.setAttribute('disabled', 'true');
+            }
+        });
+        socket.on('secondTurn', () => {
+            if (turn === 2) {
+                const buttons = document.getElementsByClassName('button');
+                for (const button of buttons) button.removeAttribute('disabled');
+            } else {
+                const buttons = document.getElementsByClassName('button');
+                for (const button of buttons) button.setAttribute('disabled', 'true');
+            }
+        });
     }
 });

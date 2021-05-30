@@ -56,7 +56,8 @@ module.exports = {
             }
         });
         return res.send({
-            success: true
+            success: true,
+            status: 'User updated'
         });
     },
     async creteUser(req, res, user) {
