@@ -11,27 +11,37 @@ module.exports = {
                 error: 'User already joined room'
             });
         }
-        const room = await Room.create({
-            owner: req.session.user.id,
-            members: [req.session.user.id],
-            private: req.query.private
-        });
-        await User.findOneAndUpdate({
-            id: req.session.user.id
-        }, {
-            $set: {
-                roomId: room._id
-            }
-        });
-        return res.send({
-            success: true,
-            status: 'Room created'
-        });
+        try {
+            const room = await Room.create({
+                owner: req.session.user.id,
+                members: [req.session.user.id],
+                private: req.query.private
+            });
+            await User.findOneAndUpdate({
+                id: req.session.user.id
+            }, {
+                $set: {
+                    roomId: room._id
+                }
+            });
+            return res.send({
+                success: true,
+                status: 'Room created'
+            });
+        } catch {
+            return res.send({
+                success: false,
+                status: 'Error occurred'
+            });
+        }
     },
     async getRooms(req, res) {
-        return res.send(await Room.find({
-            private: false
-        }));
+        return res.send({
+            success: true,
+            result: await Room.find({
+                private: false
+            })
+        });
     },
     async joinRoom(req, res) {
         const user = await userModule.getUser(req.session.user.id);
@@ -42,7 +52,7 @@ module.exports = {
             });
         }
         const members = (await Room.findById(req.params.id)).members;
-        if (members.length === 2) {
+        if (members.length !== 1) {
             return res.status(403).send({
                 success: false,
                 error: 'Room is full'
@@ -54,16 +64,22 @@ module.exports = {
                     members: req.session.user.id
                 },
             });
+            if (!room) {
+                return res.send({
+                    success: false,
+                    error: 'Invalid room id'
+                });
+            }
             req.session.user.roomId = room._id;
             await userModule.updateUser(req.session.user);
             return res.send({
                 success: true,
                 status: 'User joined room'
             });
-        } catch (err) {
-            return res.status(404).send({
+        } catch {
+            return res.send({
                 success: false,
-                error: 'Invalid room id'
+                status: 'Error occurred'
             });
         }
     },
@@ -72,6 +88,12 @@ module.exports = {
         if (room.owner === req.session.user.id) {
             try {
                 const room = await Room.findByIdAndDelete(req.params.id);
+                if (!room) {
+                    return res.send({
+                        success: false,
+                        error: 'Invalid room id'
+                    });
+                }
                 for (const userId of room.members) {
                     await User.findOneAndUpdate({
                         id: userId
@@ -85,14 +107,17 @@ module.exports = {
                     success: true,
                     status: 'Room deleted'
                 });
-            } catch (err) {
+            } catch {
                 return res.send({
                     success: false,
-                    status: 'Invalid room id'
+                    status: 'Error occurred'
                 });
             }
         } else {
-            return res.status(403).send('Forbidden');
+            return res.status(403).send({
+                success: false,
+                error: 'Forbidden'
+            });
         }
     }
 }

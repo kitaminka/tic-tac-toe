@@ -55,5 +55,3 @@ app.use((req, res) => {
 });
 
 server.listen(80);
-
-// TODO Response format

@@ -47,18 +47,25 @@ module.exports = {
                 'Authorization': user.accessToken
             }
         }).then((res) => res.json());
-        await User.findOneAndUpdate({
-            id: req.session.user.id
-        }, {
-            $set: {
-                nickname: `${userInfo.username}#${userInfo.discriminator}`,
-                avatar: userInfo.avatar
-            }
-        });
-        return res.send({
-            success: true,
-            status: 'User updated'
-        });
+        try {
+            await User.findOneAndUpdate({
+                id: req.session.user.id
+            }, {
+                $set: {
+                    nickname: `${userInfo.username}#${userInfo.discriminator}`,
+                    avatar: userInfo.avatar
+                }
+            });
+            return res.send({
+                success: true,
+                status: 'User updated'
+            });
+        } catch {
+            return res.send({
+                success: false,
+                status: 'Error occurred'
+            });
+        }
     },
     async creteUser(req, res, user) {
         return User.create({
@@ -74,6 +81,9 @@ module.exports = {
             success: false,
             error: 'Invalid user id'
         });
-        else return res.send(user);
+        else return res.send({
+            success: false,
+            result: user
+        });
     }
 }
