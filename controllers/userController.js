@@ -19,7 +19,7 @@ module.exports = {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
-        }).then((res) => res.json());
+        }).then(res => res.json());
 
         const userInfo = await fetch(`https://discord.com/api/v8/users/@me`, {
             method: 'GET',

@@ -4,15 +4,15 @@ const userModule = require('../modules/userModule');
 
 const connections = [];
 let gameState = 0;
+let gameInfo;
 
 module.exports = (io) => {
     io.sockets.on('connection', (socket) => {
-        console.log(`--${socket.id}`) // Remove this
         if (connections.length === 2) socket.disconnect;
         connections.push(socket);
         if (connections.length === 2) gameState = 1;
         if (gameState === 1) {
-            io.emit('gameStart', [
+            gameInfo = [
                 {
                     socketId: connections[0].id,
                     turn: 1
@@ -21,15 +21,19 @@ module.exports = (io) => {
                     socketId: connections[1].id,
                     turn: 2
                 }
-            ]);
+            ];
+            io.emit('gameStart', gameInfo);
             io.emit('firstTurn');
             gameState = 2;
         }
         socket.on('turn', (data) => {
-            io.emit('turnInfo', {
-                socketId: socket.id,
-                turn: data
-            });
+            if ((gameInfo[0].socketId === socket.id && gameInfo[0].turn === gameState) ||
+                (gameInfo[1].socketId === socket.id && gameInfo[1].turn === gameState)) {
+                io.emit('turnInfo', {
+                    socketId: socket.id,
+                    turn: data
+                });
+            }
             if (gameState === 1) {
                 io.emit('firstTurn');
                 gameState = 2;
@@ -39,7 +43,8 @@ module.exports = (io) => {
             }
         });
         socket.on('disconnect', () => {
-            connections.splice(connections.indexOf(socket), 1);
+            const room = Room.findByIdAndDelete(socket.request.roomId);
+            console.log(room);
             // TODO Add room removing and user updating
         });
         // TODO Add win
