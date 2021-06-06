@@ -6,7 +6,7 @@ main {
 }
 .main__profile {
     font-size: 20px;
-    margin: 50px;
+    margin: 10px;
     padding: 10px;
     background-color: #00509D;
     border-radius: 15px;
@@ -25,16 +25,49 @@ main {
 .update__button:hover {
     cursor: pointer;
 }
-.main__rooms {
+.main__create-room {
+    font-size: 20px;
+    margin: 50px;
+    padding: 10px;
+    background-color: #00509D;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    border-radius: 15px;
-    width: 80%;
-    background-color: #00509D;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+}
+.main__create-room form {
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.main__create-room h3 {
+    font-weight: normal;
+    font-size: 30px;
+}
+#createButton {
+    background-color: #00296B;
+    border-radius: 15px;
+    margin-top: 10px;
+    padding: 10px;
+    border-style: none;
+    font-size: 20px;
+    font-weight: normal;
+    font-family: 'Hammersmith One', sans-serif;
+}
+.main__rooms {
+    font-size: 20px;
+    margin: 10px;
+    padding: 10px;
+    background-color: #00509D;
+    border-radius: 15px;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 .main__rooms h3 {
     font-weight: normal;

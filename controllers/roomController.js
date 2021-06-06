@@ -6,33 +6,16 @@ module.exports = {
     async createRoom(req, res) {
         const user = await userModule.getUser(req.session.user.id);
         if (user.roomId) {
-            return res.status(409).send({
-                success: false,
-                error: 'User already joined room'
-            });
+            return res.redirect('/game/');
         }
         try {
             const room = await Room.create({
                 owner: req.session.user.id,
-                members: [req.session.user.id],
-                private: req.query.private
+                private: req.body.private
             });
-            await User.findOneAndUpdate({
-                id: req.session.user.id
-            }, {
-                $set: {
-                    roomId: room._id
-                }
-            });
-            return res.send({
-                success: true,
-                status: 'Room created'
-            });
+            return res.redirect(`/game/${room._id}`);
         } catch {
-            return res.send({
-                success: false,
-                status: 'Error occurred'
-            });
+            return res.redirect('/game/');
         }
     },
     async getRooms(req, res) {
@@ -52,7 +35,7 @@ module.exports = {
             });
         }
         const members = (await Room.findById(req.params.id)).members;
-        if (members.length !== 1) {
+        if (members.length > 1) {
             return res.status(403).send({
                 success: false,
                 error: 'Room is full'

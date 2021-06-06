@@ -1,11 +1,13 @@
 const express = require('express');
 const http = require('http');
+const bodyParser = require('body-parser')
 const session = require('express-session');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+
 require('./modules/socketModule')(io);
 require('dotenv').config();
 
@@ -43,6 +45,8 @@ io.use((socket, next) => {
 app.set('view engine', 'ejs');
 
 app.use(sessionMiddleware);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
 app.use('/users', userRouter);

@@ -9,7 +9,6 @@ const RoomSchema = new mongoose.Schema({
     },
     members: {
         type: Array,
-        required: true,
     },
     private: {
         type: Boolean,

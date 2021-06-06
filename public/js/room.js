@@ -10,9 +10,6 @@ document.addEventListener("DOMContentLoaded",async () => {
         window.location.href = 'http://127.0.0.1/game';
     } else {
         const socket = io.connect();
-        socket.on('connect', () => {
-            console.log(socket.id)
-        });
         socket.on('gameStart', (data) => {
             console.log('gameStart!');
             console.log(data)
@@ -46,6 +43,7 @@ document.addEventListener("DOMContentLoaded",async () => {
             }
         });
         socket.on('turnInfo', (data) => {
+            console.log(data)
             // TODO Fix class names and ids
             const element = document.getElementById(data.turn);
             if (data.socketId === socket.id) {
@@ -57,9 +55,8 @@ document.addEventListener("DOMContentLoaded",async () => {
             element.setAttribute('disabled', 'true');
         });
         socket.on('disconnect', () => {
-            console.log('disconnect!');
-            // TODO Redirect to main page
-        })
+           console.log(window.location)
+        });
     }
 });
 // Remove all debug console.log after finishing

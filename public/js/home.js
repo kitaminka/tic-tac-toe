@@ -10,13 +10,14 @@ document.addEventListener("DOMContentLoaded",async () => {
     const body = await fetch('/rooms/', {
         method: 'GET'
     }).then(res => res.json());
+    console.log(body)
     for (const room of body.result) {
         if (room.members.length < 2) {
             const body = await fetch(`/users/${room.owner}`, {
                 method: 'GET'
             }).then(res => res.json());
             const owner = body.result;
-            roomList.innerHTML += `<li class="list__item"><a href="/game/${room._id}">Room ID: ${room._id} Owner: ${owner.nickname}</a></li>`
+            roomList.innerHTML += `<li class="list__item"><a href="/game/${room._id}">Room ID: ${room._id}<br>Owner: ${owner.nickname}</a></li>`
         }
     }
 });

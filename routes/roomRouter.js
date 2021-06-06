@@ -17,7 +17,7 @@ roomRouter.use((req, res, next) => {
 roomRouter.get('/', (req, res) => {
     return roomController.getRooms(req, res);
 });
-roomRouter.put('/', (req, res) => {
+roomRouter.post('/', (req, res) => {
     return roomController.createRoom(req, res);
 });
 roomRouter.post('/:id', (req, res) => {

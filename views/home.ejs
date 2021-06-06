@@ -36,6 +36,20 @@
                 <img src="../img/update.png" class="update__button" id="updateButton" onclick="updateProfile()">
             </div>
         </div>
+        <div class="main__create-room">
+            <h3>Create Room</h3>
+            <form action="/rooms/" method="post">
+                <label>
+                    Private
+                    <input type="radio" name="private" value="true" required>
+                </label>
+                <label>
+                    Public
+                    <input type="radio" name="private" value="false" required>
+                </label>
+                <input type="submit" value="Create" id="createButton">
+            </form>
+        </div>
         <div class="main__rooms">
             <h3>Room List</h3>
             <ul id="roomList" class="rooms__list"></ul>
