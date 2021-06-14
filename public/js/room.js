@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded",async () => {
             console.log(roomInfo)
             if (roomInfo.roomId !== roomId) return;
 
-            if (roomInfo.xTurn === socket.id) turn = 1;
+            if (roomInfo.xPlayer === socket.id) turn = 1;
             else turn = 2;
 
             document.addEventListener('click', (event) => {
@@ -78,4 +78,4 @@ document.addEventListener("DOMContentLoaded",async () => {
         });
     }
 });
-// Remove all debug console.log after finishing
+// TODO Remove all debug console.log after finishing
