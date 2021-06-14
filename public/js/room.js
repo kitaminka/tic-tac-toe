@@ -3,6 +3,7 @@ let turn;
 
 document.addEventListener("DOMContentLoaded",async () => {
     const roomId = window.location.href.split('/')[window.location.href.split('/').length - 1];
+    let turn = 0;
     const body = await fetch(`/rooms/${roomId}`, {
         method: 'POST'
     }).then(res => res.json());
@@ -10,21 +11,29 @@ document.addEventListener("DOMContentLoaded",async () => {
         window.location.href = 'http://127.0.0.1/game';
     } else {
         const socket = io.connect();
-        socket.on('gameStart', (data) => {
+        socket.on('connect', () => {
+            console.log(socket.id);
+        });
+        socket.on('gameStart', (roomInfo) => {
             console.log('gameStart!');
-            console.log(data)
-           if (data[0].socketId === socket.id) turn = data[0].turn;
-           else if (data[1].socketId === socket.id) turn = data[1].turn;
-           document.addEventListener('click', (event) => {
+            console.log(roomInfo)
+            if (roomInfo.roomId !== roomId) return;
+
+            if (roomInfo.xTurn === socket.id) turn = 1;
+            else turn = 2;
+
+            document.addEventListener('click', (event) => {
                 if (event.target.className === 'button') {
                     socket.emit('turn', event.target.innerHTML);
                 }
             });
         });
-        socket.on('firstTurn', () => {
-            console.log('firstTurn!')
-            console.log(turn)
-            if (turn === 1) {
+        socket.on('firstTurn', (roomInfo) => {
+            if (roomInfo.roomId !== roomId) return;
+            console.log(turn);
+
+            console.log('firstTurn!');
+            if (turn === roomInfo.gameState) {
                 const buttons = document.getElementsByClassName('button');
                 for (const button of buttons) button.removeAttribute('disabled');
             } else {
@@ -32,9 +41,11 @@ document.addEventListener("DOMContentLoaded",async () => {
                 for (const button of buttons) button.setAttribute('disabled', 'true');
             }
         });
-        socket.on('secondTurn', () => {
-            console.log('secondTurn!')
-            if (turn === 2) {
+        socket.on('secondTurn', (roomInfo) => {
+            if (roomInfo.roomId !== roomId) return;
+            console.log(turn);
+            console.log('secondTurn!');
+            if (turn === roomInfo.gameState) {
                 const buttons = document.getElementsByClassName('button');
                 for (const button of buttons) button.removeAttribute('disabled');
             } else {
@@ -42,20 +53,28 @@ document.addEventListener("DOMContentLoaded",async () => {
                 for (const button of buttons) button.setAttribute('disabled', 'true');
             }
         });
-        socket.on('turnInfo', (data) => {
-            console.log(data)
+        socket.on('turnInfo', (turnInfo) => {
             // TODO Fix class names and ids
-            const element = document.getElementById(data.turn);
-            if (data.socketId === socket.id) {
-                element.innerHTML = 'X';
-            } else {
-                element.innerHTML = 'O';
+            const element = document.getElementById(turnInfo.turn);
+            if (turnInfo.roomId === roomId) {
+                if (turnInfo.gameState === 1) {
+                    element.innerHTML = 'X';
+                } else {
+                    element.innerHTML = 'O';
+                }
+                element.classList.remove('button');
+                element.setAttribute('disabled', 'true');
             }
-            element.classList.remove('button');
-            element.setAttribute('disabled', 'true');
+        });
+        socket.on('gameEnd', (endInfo) => {
+           if (endInfo.winner === socket.id) {
+               alert('You won!');
+           } else {
+               alert('You lose!');
+           }
         });
         socket.on('disconnect', () => {
-           console.log(window.location)
+            window.location.href = 'http://127.0.0.1/game';
         });
     }
 });

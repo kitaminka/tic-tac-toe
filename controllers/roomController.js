@@ -13,6 +13,7 @@ module.exports = {
                 owner: req.session.user.id,
                 private: req.body.private
             });
+
             return res.redirect(`/game/${room._id}`);
         } catch {
             return res.redirect('/game/');
@@ -67,17 +68,17 @@ module.exports = {
         }
     },
     async deleteRoom(req, res) {
-        const room = await Room.findById(req.params.id);
-        if (room.owner === req.session.user.id) {
+        const roomInfo = await Room.findById(req.params.id);
+        if (roomInfo.owner === req.session.user.id) {
             try {
-                const room = await Room.findByIdAndDelete(req.params.id);
-                if (!room) {
+                const roomInfo = await Room.findByIdAndDelete(req.params.id);
+                if (!roomInfo) {
                     return res.send({
                         success: false,
                         error: 'Invalid room id'
                     });
                 }
-                for (const userId of room.members) {
+                for (const userId of roomInfo.members) {
                     await User.findOneAndUpdate({
                         id: userId
                     }, {
