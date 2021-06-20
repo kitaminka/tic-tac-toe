@@ -1,9 +1,9 @@
 'use strict'
-let turn;
+let move;
 
 document.addEventListener("DOMContentLoaded",async () => {
     const roomId = window.location.href.split('/')[window.location.href.split('/').length - 1];
-    let turn = 0;
+    let move = 0;
     const body = await fetch(`/rooms/${roomId}`, {
         method: 'POST'
     }).then(res => res.json());
@@ -11,29 +11,22 @@ document.addEventListener("DOMContentLoaded",async () => {
         window.location.href = 'http://127.0.0.1/game';
     } else {
         const socket = io.connect();
-        socket.on('connect', () => {
-            console.log(socket.id);
-        });
         socket.on('gameStart', (roomInfo) => {
-            console.log('gameStart!');
-            console.log(roomInfo)
             if (roomInfo.roomId !== roomId) return;
 
-            if (roomInfo.xPlayer === socket.id) turn = 1;
-            else turn = 2;
+            if (roomInfo.xPlayer === socket.id) move = 1;
+            else move = 2;
 
             document.addEventListener('click', (event) => {
                 if (event.target.className === 'button') {
-                    socket.emit('turn', event.target.innerHTML);
+                    socket.emit('move', Number(event.target.innerHTML));
                 }
             });
         });
         socket.on('firstTurn', (roomInfo) => {
             if (roomInfo.roomId !== roomId) return;
-            console.log(turn);
 
-            console.log('firstTurn!');
-            if (turn === roomInfo.gameState) {
+            if (move === roomInfo.gameState) {
                 const buttons = document.getElementsByClassName('button');
                 for (const button of buttons) button.removeAttribute('disabled');
             } else {
@@ -43,9 +36,8 @@ document.addEventListener("DOMContentLoaded",async () => {
         });
         socket.on('secondTurn', (roomInfo) => {
             if (roomInfo.roomId !== roomId) return;
-            console.log(turn);
-            console.log('secondTurn!');
-            if (turn === roomInfo.gameState) {
+
+            if (move === roomInfo.gameState) {
                 const buttons = document.getElementsByClassName('button');
                 for (const button of buttons) button.removeAttribute('disabled');
             } else {
@@ -53,11 +45,11 @@ document.addEventListener("DOMContentLoaded",async () => {
                 for (const button of buttons) button.setAttribute('disabled', 'true');
             }
         });
-        socket.on('turnInfo', (turnInfo) => {
+        socket.on('moveInfo', (moveInfo) => {
             // TODO Fix class names and ids
-            const element = document.getElementById(turnInfo.turn);
-            if (turnInfo.roomId === roomId) {
-                if (turnInfo.gameState === 1) {
+            const element = document.getElementById(moveInfo.move);
+            if (moveInfo.roomId === roomId) {
+                if (moveInfo.gameState === 1) {
                     element.innerHTML = 'X';
                 } else {
                     element.innerHTML = 'O';
@@ -72,10 +64,10 @@ document.addEventListener("DOMContentLoaded",async () => {
            } else {
                alert('You lose!');
            }
+            window.location.href = 'http://127.0.0.1/game';
         });
         socket.on('disconnect', () => {
             window.location.href = 'http://127.0.0.1/game';
         });
     }
 });
-// TODO Remove all debug console.log after finishing
