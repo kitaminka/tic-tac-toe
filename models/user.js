@@ -15,9 +15,9 @@ const RoomSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        required: true,
         minlength: 32,
-        maxlength: 32
+        maxlength: 32,
+        default: null
     },
     roomId: {
         type: String,

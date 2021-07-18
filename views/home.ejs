@@ -27,7 +27,9 @@
     <main>
         <div class="main__profile">
             <div class="profile__avatar">
-                <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png">
+                <%if(avatar !== null) {%>
+                    <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png">
+                <%}%>
             </div>
             <div class="profile__nickname">
                 <%= nickname%>
