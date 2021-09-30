@@ -11,40 +11,40 @@
     <title>TicTacToe</title>
 </head>
 <body>
-<main>
-    <div class="main__profile">
-        <%if(avatar !== null) {%>
-            <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png">
-        <%} else {%>
-            <img src="../img/avatar.png" class="profile__avatar">
-        <%}%>
-        <p class="profile__nickname"><%= nickname%></p>
-        <div class="profile__buttons">
-            <div class="buttons__logout" onclick="signOut()">
-                <img src="../img/logout.png">
-            </div>
-            <div class="buttons__reload" onclick="updateProfile()">
-                <img src="../img/reload.png" alt="">
+    <main>
+        <div class="main__profile">
+            <%if(avatar !== null) {%>
+                <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png">
+            <%} else {%>
+                <img src="../img/avatar.png" class="profile__avatar">
+            <%}%>
+            <p class="profile__nickname"><%= nickname%></p>
+            <div class="profile__buttons">
+                <div class="buttons__logout" onclick="signOut()">
+                    <img src="../img/logout.png">
+                </div>
+                <div class="buttons__reload" onclick="updateProfile()">
+                    <img src="../img/reload.png" alt="">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="main__create-room">
-        <form action="/rooms/" method="post" class="create-room__form">
-            <p class="form__header">Create Room</p>
-            <label>
-                Private
-                <input type="radio" name="private" value="true" required>
-            </label>
-            <label>
-                Public
-                <input type="radio" name="private" value="false" required>
-            </label>
-            <input type="submit" value="Create" class="form__button">
-        </form>
-    </div>
-    <div class="main__room-list" id="roomList">
-        <p class="room-list__header">Room List</p>
-    </div>
-</main>
+        <div class="main__create-room">
+            <form action="/rooms/" method="post" class="create-room__form">
+                <p class="form__header">Create Room</p>
+                <label>
+                    Private
+                    <input type="radio" name="private" value="true" required>
+                </label>
+                <label>
+                    Public
+                    <input type="radio" name="private" value="false" required>
+                </label>
+                <input type="submit" value="Create" class="form__button">
+            </form>
+        </div>
+        <div class="main__room-list" id="roomList">
+            <p class="room-list__header">Room List</p>
+        </div>
+    </main>
 </body>
 </html>
