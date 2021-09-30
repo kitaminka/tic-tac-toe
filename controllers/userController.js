@@ -27,6 +27,7 @@ module.exports = {
                 'Authorization':`${data.token_type} ${data.access_token}`
             }
         }).then((res) => res.json());
+
         userInfo.nickname = `${userInfo.username}#${userInfo.discriminator}`;
         userInfo.accessToken = `${data.token_type} ${data.access_token}`;
         req.session.user = await this.updateUser(req, res, userInfo);

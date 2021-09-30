@@ -69,6 +69,10 @@ main {
 .login__auth-button a:visited {
     color: #001858;
 }
+.login__auth-button a img {
+    width: 30px;
+    height: 22px;
+}
 .login__github-link {
     text-decoration: none;
 }
