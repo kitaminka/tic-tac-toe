@@ -21,6 +21,13 @@ userRouter.get('/update', (req, res) => {
     });
     else return userController.updateUserInfo(req, res);
 });
+userRouter.get('/signout', (req, res) => {
+    if (!req.session.user) return res.status(403).send({
+        success: false,
+        error: 'Forbidden'
+    });
+    else return userController.signOut(req, res);
+});
 userRouter.get('/:id', (req, res) => {
     if (!req.session.user) return res.status(403).send({
         success: false,

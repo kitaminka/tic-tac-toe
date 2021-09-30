@@ -75,6 +75,12 @@ module.exports = {
             accessToken: user.accessToken
         });
     },
+    async signOut(req, res) {
+        req.session.destroy();
+        return res.send({
+            success: true,
+        });
+    },
     async getUser(req, res) {
         const user = await userModule.getUser(req.params.id);
         if (!user) return res.status(404).send({
