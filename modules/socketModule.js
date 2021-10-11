@@ -112,18 +112,10 @@ module.exports = (io) => {
                     loser: socket.id
                 });
             }
-            const room = await Room.findByIdAndDelete(socket.request.session.user.roomId);
-            if (room.members[0] === socket.request.session.user.id) {
+            const room = await Room.findByIdAndRemove(socket.request.session.user.roomId);
+            for (const member of room.members) {
                 await User.findOneAndUpdate({
-                    id: room.members[1]
-                }, {
-                    $set: {
-                        roomId: null
-                    }
-                });
-            } else {
-                await User.findOneAndUpdate({
-                    id: room.members[0]
+                    id: member
                 }, {
                     $set: {
                         roomId: null

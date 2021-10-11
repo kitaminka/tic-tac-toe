@@ -59,6 +59,7 @@ main {
     cursor: pointer;
 }
 .login__auth-button a {
+    color: #001858;
     text-decoration: none;
     display: grid;
     align-items: center;
@@ -74,6 +75,7 @@ main {
     height: 22px;
 }
 .login__github-link {
+    color: #001858;
     text-decoration: none;
 }
 .login__github-link:visited {

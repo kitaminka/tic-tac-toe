@@ -35,8 +35,13 @@ module.exports = {
                 error: 'User already joined room'
             });
         }
-        const members = (await Room.findById(req.params.id)).members;
-        if (members.length > 1) {
+        const room = await Room.findById(req.params.id);
+        if (!room) {
+            return res.status(403).send({
+                success: false,
+                error: 'Room is full'
+            });
+        } else if (room.members.length > 1) {
             return res.status(403).send({
                 success: false,
                 error: 'Room is full'
