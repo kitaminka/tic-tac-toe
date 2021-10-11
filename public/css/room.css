@@ -27,7 +27,7 @@ main {
     border-radius: 15px;
     display: grid;
     grid-template-columns: 200px 1fr;
-    grid-template-rows: 1fr 25px 1fr;
+    grid-template-rows: 1fr 24px 1fr;
     grid-gap: 50px;
 }
 .main__user {
@@ -49,5 +49,34 @@ main {
     grid-column: 1 / 3;
 }
 .main__vs {
-    font-size: 25px;
+    font-size: 24px;
+    justify-self: center;
+}
+.main__game {
+    background: #FEF6E4;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    grid-column: 2;
+    grid-row: 1 / 4;
+    display: grid;
+    grid-template-rows: 24px 1fr;
+    padding: 30px;
+    align-items: center;
+    justify-items: center;
+}
+.game__header {
+    text-align: center;
+}
+.game__field {
+    display: grid;
+    width: 390px;
+    height: 390px;
+    grid-gap: 30px;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+}
+.field__button {
+    background: #8BD3DD;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
 }

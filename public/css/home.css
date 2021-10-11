@@ -45,6 +45,9 @@ main {
     width: 128px;
     height: 128px;
 }
+#circleAvatar {
+    border-radius: 64px;
+}
 .profile__nickname {
     grid-column: 1 / 3;
 }
