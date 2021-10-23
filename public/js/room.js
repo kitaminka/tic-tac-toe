@@ -35,7 +35,8 @@ document.addEventListener("DOMContentLoaded",async () => {
             }
 
             document.addEventListener('click', (event) => {
-                if (event.target.className === 'field__button') {
+                console.log(event.target.className);
+                if (event.target.className.includes('field__button')) {
                     socket.emit('move', Number(event.target.id));
                 }
             });
@@ -46,16 +47,22 @@ document.addEventListener("DOMContentLoaded",async () => {
             if (move === roomInfo.gameState) {
                 const buttons = document.getElementsByClassName('field__button');
                 for (const button of buttons) {
-                    button.classList.add('field__button-active');
-                    button.classList.remove('field__button-disabled');
-                    button.removeAttribute('disabled');
+                    if (button.innerHTML === '-') {
+                        button.innerHTML = '?';
+                        button.classList.add('field__button-active');
+                        button.classList.remove('field__button-disabled');
+                        button.removeAttribute('disabled');
+                    }
                 }
             } else {
                 const buttons = document.getElementsByClassName('field__button');
                 for (const button of buttons) {
-                    button.classList.remove('field__button-active');
-                    button.classList.add('field__button-disabled');
-                    button.setAttribute('disabled', 'true');
+                    if (button.innerHTML === '?') {
+                        button.innerHTML = '-';
+                        button.classList.remove('field__button-active');
+                        button.classList.add('field__button-disabled');
+                        button.setAttribute('disabled', 'true');
+                    }
                 }
             }
         });
@@ -65,16 +72,22 @@ document.addEventListener("DOMContentLoaded",async () => {
             if (move === roomInfo.gameState) {
                 const buttons = document.getElementsByClassName('field__button');
                 for (const button of buttons) {
-                    button.classList.add('field__button-active');
-                    button.classList.remove('field__button-disabled');
-                    button.removeAttribute('disabled');
+                    if (button.innerHTML === '-') {
+                        button.innerHTML = '?';
+                        button.classList.add('field__button-active');
+                        button.classList.remove('field__button-disabled');
+                        button.removeAttribute('disabled');
+                    }
                 }
             } else {
                 const buttons = document.getElementsByClassName('field__button');
                 for (const button of buttons) {
-                    button.classList.remove('field__button-active');
-                    button.classList.add('field__button-disabled');
-                    button.setAttribute('disabled', 'true');
+                    if (button.innerHTML === '?') {
+                        button.innerHTML = '-';
+                        button.classList.remove('field__button-active');
+                        button.classList.add('field__button-disabled');
+                        button.setAttribute('disabled', 'true');
+                    }
                 }
             }
         });

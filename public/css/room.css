@@ -86,9 +86,8 @@ main {
     box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
     font-size: 50px;
-}
-.field__button-disabled {
     border-color: transparent;
+    transition: box-shadow 0.2s;
 }
 .field__button-active:hover {
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);

@@ -108,7 +108,7 @@ module.exports = (io) => {
             }
         });
         socket.on('disconnect', async () => {
-            if (!roomInfo.winner) {
+            if (!roomInfo.winner && roomInfo.oPlayer) {
                 let winner;
 
                 if (roomInfo.xPlayer.socket === socket.id) {
@@ -123,14 +123,16 @@ module.exports = (io) => {
                 });
             }
             const room = await Room.findByIdAndRemove(socket.request.session.user.roomId);
-            for (const member of room.members) {
-                await User.findOneAndUpdate({
-                    id: member
-                }, {
-                    $set: {
-                        roomId: null
-                    }
-                });
+            if (room) {
+                for (const member of room.members) {
+                    await User.findOneAndUpdate({
+                        id: member
+                    }, {
+                        $set: {
+                            roomId: null
+                        }
+                    });
+                }
             }
         });
     });
