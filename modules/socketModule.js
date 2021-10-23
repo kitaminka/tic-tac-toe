@@ -13,15 +13,25 @@ module.exports = (io) => {
                 xTurns: [],
                 oTurns: [],
                 roomId: socket.request.session.user.roomId,
-                xPlayer: socket.id
+                xPlayer: {
+                    socket: socket.id,
+                    id: socket.request.session.user.id,
+                    nickname: socket.request.session.user.nickname,
+                    avatar: socket.request.session.user.avatar
+                }
             });
         } else {
             let roomInfo = rooms.get(socket.request.session.user.roomId);
 
             if (roomInfo.oPlayer) return socket.disconnect;
 
-            roomInfo.oPlayer = socket.id;
-            roomInfo.gameState = 1
+            roomInfo.oPlayer = {
+                socket: socket.id,
+                id: socket.request.session.user.id,
+                nickname: socket.request.session.user.nickname,
+                avatar: socket.request.session.user.avatar
+            };
+            roomInfo.gameState = 1;
         }
 
         let roomInfo = rooms.get(socket.request.session.user.roomId);
@@ -33,7 +43,7 @@ module.exports = (io) => {
         socket.on('move', (moveInfo) => {
             if (![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(moveInfo)) return;
             if (roomInfo.xTurns.includes(moveInfo) || roomInfo.oTurns.includes(moveInfo)) return;
-            if ((roomInfo.gameState === 1 && roomInfo.xPlayer === socket.id) || (roomInfo.gameState === 2 && roomInfo.oPlayer === socket.id)) {
+            if ((roomInfo.gameState === 1 && roomInfo.xPlayer.socket === socket.id) || (roomInfo.gameState === 2 && roomInfo.oPlayer.socket === socket.id)) {
                 if (roomInfo.gameState === 1) roomInfo.xTurns.push(moveInfo);
                 else roomInfo.oTurns.push(moveInfo);
 
@@ -75,13 +85,13 @@ module.exports = (io) => {
                 }
 
                 if (xWin) {
-                    roomInfo.winner = roomInfo.xPlayer;
+                    roomInfo.winner = roomInfo.xPlayer.socket;
                     io.emit('gameEnd', {
                         winner: roomInfo.winner,
                         loser: socket.id
                     });
                 } else if (oWin) {
-                    roomInfo.winner = roomInfo.oPlayer;
+                    roomInfo.winner = roomInfo.oPlayer.socket;
                     io.emit('gameEnd', {
                         winner: roomInfo.winner,
                         loser: socket.id
@@ -101,10 +111,10 @@ module.exports = (io) => {
             if (!roomInfo.winner) {
                 let winner;
 
-                if (roomInfo.xPlayer === socket.id) {
-                    winner = roomInfo.oPlayer;
+                if (roomInfo.xPlayer.socket === socket.id) {
+                    winner = roomInfo.oPlayer.socket;
                 } else {
-                    winner = roomInfo.xPlayer;
+                    winner = roomInfo.xPlayer.socket;
                 }
 
                 io.emit('gameEnd', {

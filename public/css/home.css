@@ -45,7 +45,7 @@ main {
     width: 128px;
     height: 128px;
 }
-#circleAvatar {
+.profile__avatar-circle {
     border-radius: 64px;
 }
 .profile__nickname {

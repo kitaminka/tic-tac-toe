@@ -45,6 +45,9 @@ main {
     width: 128px;
     height: 128px;
 }
+.user__avatar-circle {
+    border-radius: 64px;
+}
 .user__nickname {
     grid-column: 1 / 3;
 }
@@ -76,7 +79,18 @@ main {
     grid-template-rows: 100px 100px 100px;
 }
 .field__button {
+    text-align: center;
+    font-family: 'Hammersmith One', sans-serif;
+    color: #001858;
     background: #8BD3DD;
     box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
     border-radius: 15px;
+    font-size: 50px;
+}
+.field__button-disabled {
+    border-color: transparent;
+}
+.field__button-active:hover {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
 }
