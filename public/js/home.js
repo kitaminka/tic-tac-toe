@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded",async () => {
     const body = await fetch('/rooms/', {
         method: 'GET'
     }).then(res => res.json());
-    console.log(body)
     for (const room of body.result) {
         if (room.members.length < 2) {
             const body = await fetch(`/users/${room.owner}`, {

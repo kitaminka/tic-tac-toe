@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded",async () => {
             }
 
             document.addEventListener('click', (event) => {
-                console.log(event.target.className);
                 if (event.target.className.includes('field__button')) {
                     socket.emit('move', Number(event.target.id));
                 }
