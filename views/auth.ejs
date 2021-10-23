@@ -6,37 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/auth.css">
     <title>TicTacToe</title>
 </head>
 <body>
-    <header>
-        <nav class="header__nav">
-            <ul class="nav__menu">
-                <li class="menu__item">
-                    <a href="/">Home</a>
-                </li>
-                <li class="menu__item">
-                    <a href="#">About</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
     <main>
-        <div class="main__auth-button">
-            <a class="auth-button__link" href="https://discord.com/api/oauth2/authorize?client_id=815550306351710238&redirect_uri=http%3A%2F%2F127.0.0.1%2Fusers%2Fauth%2F&response_type=code&scope=identify">Authorization</a>
+        <div class="main__login">
+            <h1>TicTacToe</h1>
+            <div class="login__auth-button">
+                <a class="auth-button__link" href="<%= process.env.AUTHORIZATION_LINK%>">
+                    <img src="../img/discord.png">
+                    Login
+                </a>
+            </div>
+            <a href="https://github.com/Kitaminka/TicTacToe" class="login__github-link">GitHub</a>
         </div>
     </main>
-    <footer>
-        <ul class="footer__links">
-            <li class="links__item">
-                <a href="https://github.com/Kitaminka/TicTacToe">GitHub repository</a>
-            </li>
-            <li class="links__item">
-                <a href="https://github.com/Kitaminka/">Github profile</a>
-            </li>
-        </ul>
-    </footer>
 </body>
 </html>

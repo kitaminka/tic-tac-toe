@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,41 +6,31 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/home.css">
     <script src="../js/home.js"></script>
     <title>TicTacToe</title>
 </head>
 <body>
-    <header>
-        <nav class="header__nav">
-            <ul class="nav__menu">
-                <li class="menu__item">
-                    <a href="/game">Home</a>
-                </li>
-                <li class="menu__item">
-                    <a href="#">About</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
     <main>
         <div class="main__profile">
-            <div class="profile__avatar">
-                <%if(avatar !== null) {%>
-                    <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png">
-                <%}%>
-            </div>
-            <div class="profile__nickname">
-                <%= nickname%>
-            </div>
-            <div class="profile__update">
-                <img src="../img/update.png" class="update__button" id="updateButton" onclick="updateProfile()">
+            <%if(avatar !== null) {%>
+                <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png" class="profile__avatar profile__avatar-circle">
+            <%} else {%>
+                <img src="../img/avatar.png" class="profile__avatar">
+            <%}%>
+            <p class="profile__nickname"><%= nickname%></p>
+            <div class="profile__buttons">
+                <div class="buttons__logout" onclick="signOut()">
+                    <img src="../img/logout.png">
+                </div>
+                <div class="buttons__reload" onclick="updateProfile()">
+                    <img src="../img/reload.png" alt="">
+                </div>
             </div>
         </div>
         <div class="main__create-room">
-            <h3>Create Room</h3>
-            <form action="/rooms/" method="post">
+            <form action="/rooms/" method="post" class="create-room__form">
+                <p class="form__header">Create Room</p>
                 <label>
                     Private
                     <input type="radio" name="private" value="true" required>
@@ -49,23 +39,12 @@
                     Public
                     <input type="radio" name="private" value="false" required>
                 </label>
-                <input type="submit" value="Create" id="createButton">
+                <input type="submit" value="Create" class="form__button">
             </form>
         </div>
-        <div class="main__rooms">
-            <h3>Room List</h3>
-            <ul id="roomList" class="rooms__list"></ul>
+        <div class="main__room-list" id="roomList">
+            <p class="room-list__header">Room List</p>
         </div>
     </main>
-    <footer>
-        <ul class="footer__links">
-            <li class="links__item">
-                <a href="https://github.com/Kitaminka/TicTacToe">GitHub repository</a>
-            </li>
-            <li class="links__item">
-                <a href="https://github.com/Kitaminka/">Github profile</a>
-            </li>
-        </ul>
-    </footer>
 </body>
 </html>

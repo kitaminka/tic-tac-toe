@@ -1,27 +1,83 @@
-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+* {
+    margin: 0;
+    padding: 0;
 }
-.main__auth-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 15px;
-    width: 220px;
-    height: 75px;
-    background-color: #00509D;
-    transition: width 0.3s;
-}
-.main__auth-button:hover {
-    width: 270px;
-}
-.main__auth-button a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+html, body {
     width: 100%;
     height: 100%;
-    font-size: 30px;
+}
+body {
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 24px;
+    color: #001858;
+    background: #FEF6E4;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+main {
+    width: 80%;
+    height: 80%;
+    padding: 50px;
+    box-sizing: border-box;
+    background: #F3D2C1;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+.main__login {
+    background: #FEF6E4;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50% 10%;
+    justify-items: center;
+    align-items: end;
+    padding: 30px 0;
+}
+.main__login h1 {
+
+}
+.login__auth-button {
+    margin-top: 30px;
+    font-size: 24px;
+    background: #8BD3DD;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.25);
+    border-radius: 15px;
+    border: none;
+    align-self: end;
+    transition: box-shadow 0.2s;
+    padding: 10px;
+}
+.login__auth-button:hover {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+}
+.login__auth-button a {
+    color: #001858;
     text-decoration: none;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: 30px 1fr;
+    grid-gap: 10px;
+}
+.login__auth-button a:visited {
+    color: #001858;
+}
+.login__auth-button a img {
+    width: 30px;
+    height: 22px;
+}
+.login__github-link {
+    color: #001858;
+    text-decoration: none;
+}
+.login__github-link:visited {
+    color: #001858;
 }

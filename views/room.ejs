@@ -4,27 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="../css/home.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hammersmith+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/room.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="../js/room.js"></script>
     <title>TicTacToe</title>
 </head>
 <body>
-    <%= nickname%>
-    <div>
-        <button disabled class="button" id="1">1</button>
-        <button disabled class="button" id="2">2</button>
-        <button disabled class="button" id="3">3</button>
-    </div>
-    <div>
-        <button disabled class="button" id="4">4</button>
-        <button disabled class="button" id="5">5</button>
-        <button disabled class="button" id="6">6</button>
-    </div>
-    <div>
-        <button disabled class="button" id="7">7</button>
-        <button disabled class="button" id="8">8</button>
-        <button disabled class="button" id="9">9</button>
-    </div>
+    <main>
+        <div class="main__user">
+            <%if(avatar !== null) {%>
+                <img src="https://cdn.discordapp.com/avatars/<%= id%>/<%= avatar%>.png" class="user__avatar user__avatar-circle">
+            <%} else {%>
+                <img src="../img/avatar.png" class="user__avatar">
+            <%}%>
+            <p class="user__nickname"><%= nickname%></p>
+        </div>
+        <p class="main__vs">VS</p>
+        <div class="main__user">
+            <img src="../img/avatar.png" class="user__avatar" id="avatar">
+            <p class="user__nickname" id="nickname">Waiting...</p>
+        </div>
+        <div class="main__game">
+            <p class="game__header">Game</p>
+            <div class="game__field">
+                <button disabled class="field__button field__button-disabled" id="1">-</button>
+                <button disabled class="field__button field__button-disabled" id="2">-</button>
+                <button disabled class="field__button field__button-disabled" id="3">-</button>
+                <button disabled class="field__button field__button-disabled" id="4">-</button>
+                <button disabled class="field__button field__button-disabled" id="5">-</button>
+                <button disabled class="field__button field__button-disabled" id="6">-</button>
+                <button disabled class="field__button field__button-disabled" id="7">-</button>
+                <button disabled class="field__button field__button-disabled" id="8">-</button>
+                <button disabled class="field__button field__button-disabled" id="9">-</button>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
