@@ -58,4 +58,4 @@ app.use((req, res) => {
     return res.status(404).send('Not Found');
 });
 
-server.listen(80);
+server.listen(process.env.PORT || '3000');
