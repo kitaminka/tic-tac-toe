@@ -23,6 +23,7 @@ ___
 - Go to the **OAuth2** tab, copy **client ID** and **client secret**. Specify **redirect URL** like this: `http://[your domain]/user/auth` or `https://[your domain]/user/auth`.
 
 ![Screenshot](https://i.imgur.com/Jfpi7dk.png)
+- Using **OAuth2 URL Generator** create **authorization link** with **identify** scope.
 ___
 ### MongoDB free hosting
 As a free hosting for the **MongoDB**, you can use a [**MongoDB Atlas**](https://cloud.mongodb.com) free cluster.
