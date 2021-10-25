@@ -16,14 +16,14 @@ npm install
 npm start
 ```
 ___
-###Features
+### Features
 - Authorization using Discord API
 - Room system
 - Socket usage
 - MongoDB usage
 - Model-View-Controller pattern
 ___
-###Screenshots
+### Screenshots
 ![Screenshot](https://i.imgur.com/GhvXqfl.png)
 ![Screenshot](https://i.imgur.com/LdEiWJC.png)
 ___
