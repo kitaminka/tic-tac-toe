@@ -1,5 +1,5 @@
 # TicTacToe
-
+Tic-tac-toe game with **room system** and authorization using **Discord**.
 ___
 ### Installation and launching
 - Clone the repository:
@@ -16,11 +16,22 @@ npm install
 npm start
 ```
 ___
+###Features
+- Authorization using Discord API
+- Room system
+- Socket usage
+- MongoDB usage
+- Model-View-Controller pattern
+___
+###Screenshots
+![Screenshot](https://i.imgur.com/GhvXqfl.png)
+![Screenshot](https://i.imgur.com/LdEiWJC.png)
+___
 ### Discord application creation
 - Go to the [**Discord Developer Portal**](https://discord.com/developers/applications) and create an **application**.
 
 ![Screenshot](https://i.imgur.com/wpxEvSK.png)
-- Go to the **OAuth2** tab, copy **client ID** and **client secret**. Specify **redirect URL** like this: `http://[your domain]/user/auth` or `https://[your domain]/user/auth`.
+- Go to the **OAuth2** tab, copy **client ID** and **client secret**. Specify **redirect URL** like this: `http://[your domain]/users/auth` or `https://[your domain]/users/auth`.
 
 ![Screenshot](https://i.imgur.com/Jfpi7dk.png)
 - Using **OAuth2 URL Generator** create **authorization link** with **identify** scope.
