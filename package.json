@@ -1,7 +1,7 @@
 {
   "name": "tictactoe",
   "version": "1.0.0",
-  "description": "",
+  "description": "Tic-tac-toe game with room system and authorization using Discord",
   "main": "app.js",
   "scripts": {
     "start": "node .",
