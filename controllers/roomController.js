@@ -1,5 +1,5 @@
-const Room = require('../models/room');
-const User = require('../models/user');
+const Room = require('../models/roomModel');
+const User = require('../models/userModel');
 const userModule = require('../modules/userModule');
 
 module.exports = {

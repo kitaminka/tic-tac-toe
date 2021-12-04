@@ -1,12 +1,11 @@
-const Room = require('../models/room');
-const User = require('../models/user.js');
-require('../modules/userModule');
+const Room = require('../models/roomModel');
+const User = require('../models/userModel.js');
 
 const rooms = new Map;
 const winPositions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
 
-module.exports = (io) => {
-    io.sockets.on('connection', (socket) => {
+module.exports = async (io) => {
+    io.sockets.on('connection', async (socket) => {
         if (!rooms.get(socket.request.session.user.roomId)) {
             rooms.set(socket.request.session.user.roomId, {
                 gameState: 0,
@@ -40,8 +39,13 @@ module.exports = (io) => {
             io.emit('gameStart', roomInfo);
             io.emit('firstTurn', roomInfo);
         }
-        socket.on('move', (moveInfo) => {
+        socket.on('move', async (moveInfo) => {
+            const user = await User.findOne({
+                id: socket.request.session.user.id
+            });
+            if (user.roomId !== roomInfo.roomId) return;
             if (![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(moveInfo)) return;
+            if (socket.request.session.user.id !== roomInfo.xPlayer.id || socket.request.session.user.id !== roomInfo.oPlayer.id)
             if (roomInfo.xTurns.includes(moveInfo) || roomInfo.oTurns.includes(moveInfo)) return;
             if ((roomInfo.gameState === 1 && roomInfo.xPlayer.socket === socket.id) || (roomInfo.gameState === 2 && roomInfo.oPlayer.socket === socket.id)) {
                 if (roomInfo.gameState === 1) roomInfo.xTurns.push(moveInfo);

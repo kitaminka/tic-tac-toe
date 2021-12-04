@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const User = require('../models/user');
+const User = require('../models/userModel');
 const userModule = require('../modules/userModule');
 
 module.exports = {
