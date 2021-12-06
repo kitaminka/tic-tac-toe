@@ -39,76 +39,83 @@ module.exports = async (io) => {
             io.emit('gameStart', roomInfo);
             io.emit('firstTurn', roomInfo);
         }
+
         socket.on('move', async (moveInfo) => {
             const user = await User.findOne({
                 id: socket.request.session.user.id
             });
-            if (user.roomId !== roomInfo.roomId) return;
-            if (![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(moveInfo)) return;
-            if (socket.request.session.user.id !== roomInfo.xPlayer.id || socket.request.session.user.id !== roomInfo.oPlayer.id)
-            if (roomInfo.xTurns.includes(moveInfo) || roomInfo.oTurns.includes(moveInfo)) return;
-            if ((roomInfo.gameState === 1 && roomInfo.xPlayer.socket === socket.id) || (roomInfo.gameState === 2 && roomInfo.oPlayer.socket === socket.id)) {
-                if (roomInfo.gameState === 1) roomInfo.xTurns.push(moveInfo);
-                else roomInfo.oTurns.push(moveInfo);
-
-                io.emit('moveInfo', {
-                    move: moveInfo,
-                    gameState: roomInfo.gameState,
-                    roomId: socket.request.session.user.roomId
+            if (user.roomId !== roomInfo.roomId) {
+                return io.emit('gameEnd', {
+                    winner: roomInfo.xPlayer.socket === socket.id ? roomInfo.oPlayer.socket : roomInfo.xPlayer.socket,
+                    loser: socket.id
                 });
+            }
 
-                let xCount = 0;
-                let oCount = 0;
-                let xWin = false;
-                let oWin = false;
+            if (![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(moveInfo)) return;
+            if (socket.request.session.user.id !== roomInfo.xPlayer.id && socket.request.session.user.id !== roomInfo.oPlayer.id) return;
+            if (roomInfo.xTurns.includes(moveInfo) || roomInfo.oTurns.includes(moveInfo)) return;
+            if ((roomInfo.gameState === 1 && roomInfo.oPlayer.socket === socket.id) || (roomInfo.gameState === 2 && roomInfo.xPlayer.socket === socket.id)) return;
 
+            if (roomInfo.gameState === 1) roomInfo.xTurns.push(moveInfo);
+            else roomInfo.oTurns.push(moveInfo);
+
+            io.emit('moveInfo', {
+                move: moveInfo,
+                gameState: roomInfo.gameState,
+                roomId: socket.request.session.user.roomId
+            });
+
+            let xCount = 0;
+            let oCount = 0;
+            let xWin = false;
+            let oWin = false;
+
+            for (const winPositionsArr of winPositions) {
+                for (const winPosition of winPositionsArr) {
+                    for (const move of roomInfo.xTurns) {
+                        if (winPosition === move) xCount++;
+                    }
+                }
+                if (xCount === winPositionsArr.length) {
+                    xWin = true;
+                }
+                xCount = 0;
+            }
+
+            if (!xWin) {
                 for (const winPositionsArr of winPositions) {
                     for (const winPosition of winPositionsArr) {
-                        for (const move of roomInfo.xTurns) {
-                            if (winPosition === move) xCount++;
+                        for (const move of roomInfo.oTurns) {
+                            if (winPosition === move) oCount++;
                         }
                     }
-                    if (xCount === winPositionsArr.length) {
-                        xWin = true;
+                    if (oCount === winPositionsArr.length) {
+                        oWin = true;
                     }
-                    xCount = 0;
+                    oCount = 0;
                 }
+            }
 
-                if (!xWin) {
-                    for (const winPositionsArr of winPositions) {
-                        for (const winPosition of winPositionsArr) {
-                            for (const move of roomInfo.oTurns) {
-                                if (winPosition === move) oCount++;
-                            }
-                        }
-                        if (oCount === winPositionsArr.length) {
-                            oWin = true;
-                        }
-                        oCount = 0;
-                    }
-                }
+            if (xWin) {
+                roomInfo.winner = roomInfo.xPlayer.socket;
+                io.emit('gameEnd', {
+                    winner: roomInfo.winner,
+                    loser: socket.id
+                });
+            } else if (oWin) {
+                roomInfo.winner = roomInfo.oPlayer.socket;
+                io.emit('gameEnd', {
+                    winner: roomInfo.winner,
+                    loser: socket.id
+                });
+            }
 
-                if (xWin) {
-                    roomInfo.winner = roomInfo.xPlayer.socket;
-                    io.emit('gameEnd', {
-                        winner: roomInfo.winner,
-                        loser: socket.id
-                    });
-                } else if (oWin) {
-                    roomInfo.winner = roomInfo.oPlayer.socket;
-                    io.emit('gameEnd', {
-                        winner: roomInfo.winner,
-                        loser: socket.id
-                    });
-                }
-
-                if (roomInfo.gameState === 1) {
-                    roomInfo.gameState = 2;
-                    io.emit('secondTurn', roomInfo);
-                } else {
-                    roomInfo.gameState = 1;
-                    io.emit('firstTurn', roomInfo);
-                }
+            if (roomInfo.gameState === 1) {
+                roomInfo.gameState = 2;
+                io.emit('secondTurn', roomInfo);
+            } else {
+                roomInfo.gameState = 1;
+                io.emit('firstTurn', roomInfo);
             }
         });
         socket.on('disconnect', async () => {
