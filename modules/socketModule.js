@@ -4,6 +4,24 @@ const User = require('../models/userModel.js');
 const rooms = new Map;
 const winPositions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
 
+async function checkWin(turns, winPositions) {
+    let correctTurns = 0;
+
+    for (const winPositionsArr of winPositions) {
+        for (const winPosition of winPositionsArr) {
+            for (const move of turns) {
+                if (winPosition === move) correctTurns++;
+            }
+        }
+        if (correctTurns === winPositionsArr.length) {
+            return true;
+        }
+        correctTurns = 0;
+    }
+
+    return false;
+}
+
 module.exports = async (io) => {
     io.sockets.on('connection', async (socket) => {
         if (!rooms.get(socket.request.session.user.roomId)) {
@@ -45,9 +63,11 @@ module.exports = async (io) => {
                 id: socket.request.session.user.id
             });
             if (user.roomId !== roomInfo.roomId) {
+                roomInfo.winner = roomInfo.xPlayer.socket === socket.id ? roomInfo.oPlayer.socket : roomInfo.xPlayer.socket;
                 return io.emit('gameEnd', {
-                    winner: roomInfo.xPlayer.socket === socket.id ? roomInfo.oPlayer.socket : roomInfo.xPlayer.socket,
-                    loser: socket.id
+                    roomId: roomInfo.roomId,
+                    winner: roomInfo.winner,
+                    disconnected: socket.id
                 });
             }
 
@@ -65,46 +85,24 @@ module.exports = async (io) => {
                 roomId: socket.request.session.user.roomId
             });
 
-            let xCount = 0;
-            let oCount = 0;
-            let xWin = false;
-            let oWin = false;
-
-            for (const winPositionsArr of winPositions) {
-                for (const winPosition of winPositionsArr) {
-                    for (const move of roomInfo.xTurns) {
-                        if (winPosition === move) xCount++;
-                    }
-                }
-                if (xCount === winPositionsArr.length) {
-                    xWin = true;
-                }
-                xCount = 0;
-            }
-
-            if (!xWin) {
-                for (const winPositionsArr of winPositions) {
-                    for (const winPosition of winPositionsArr) {
-                        for (const move of roomInfo.oTurns) {
-                            if (winPosition === move) oCount++;
-                        }
-                    }
-                    if (oCount === winPositionsArr.length) {
-                        oWin = true;
-                    }
-                    oCount = 0;
-                }
-            }
-
-            if (xWin) {
+            if (await checkWin(roomInfo.xTurns, winPositions)) {
                 roomInfo.winner = roomInfo.xPlayer.socket;
-                io.emit('gameEnd', {
+                return io.emit('gameEnd', {
+                    roomId: roomInfo.roomId,
                     winner: roomInfo.winner,
                     loser: socket.id
                 });
-            } else if (oWin) {
+            } else if (await checkWin(roomInfo.oTurns, winPositions)) {
                 roomInfo.winner = roomInfo.oPlayer.socket;
-                io.emit('gameEnd', {
+                return io.emit('gameEnd', {
+                    roomId: roomInfo.roomId,
+                    winner: roomInfo.winner,
+                    loser: socket.id
+                });
+            } else if (roomInfo.oTurns.length + roomInfo.xTurns.length === 9) {
+                roomInfo.winner = roomInfo.oPlayer.socket;
+                return io.emit('gameEnd', {
+                    roomId: roomInfo.roomId,
                     winner: roomInfo.winner,
                     loser: socket.id
                 });
@@ -112,12 +110,13 @@ module.exports = async (io) => {
 
             if (roomInfo.gameState === 1) {
                 roomInfo.gameState = 2;
-                io.emit('secondTurn', roomInfo);
+                return io.emit('secondTurn', roomInfo);
             } else {
                 roomInfo.gameState = 1;
-                io.emit('firstTurn', roomInfo);
+                return io.emit('firstTurn', roomInfo);
             }
         });
+
         socket.on('disconnect', async () => {
             if (!roomInfo.winner && roomInfo.oPlayer) {
                 let winner;
@@ -129,13 +128,20 @@ module.exports = async (io) => {
                 }
 
                 io.emit('gameEnd', {
+                    roomId: roomInfo.roomId,
                     winner: winner,
-                    loser: socket.id
+                    disconnected: socket.id
                 });
             }
             const room = await Room.findByIdAndRemove(socket.request.session.user.roomId);
-            if (room) {
-                for (const member of room.members) {
+            if (!room) return;
+
+            for (const member of room.members) {
+                const user = await User.findOne({
+                    id: member
+                });
+
+                if (user.roomId === roomInfo.roomId) {
                     await User.findOneAndUpdate({
                         id: member
                     }, {

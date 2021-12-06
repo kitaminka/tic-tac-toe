@@ -104,14 +104,19 @@ document.addEventListener("DOMContentLoaded",async () => {
             }
         });
         socket.on('gameEnd', (endInfo) => {
+            if (endInfo.roomId !== roomId) return;
+
            if (endInfo.winner === socket.id) {
                alert('You won!');
-           } else {
+           } else if (endInfo.disconnected === socket.id) {
+               alert('You are disconnected from the game!');
+           }else {
                alert('You lose!');
            }
             window.location.pathname = '/game';
         });
         socket.on('disconnect', () => {
+            alert('You are disconnected from the game!');
             window.location.pathname = '/game';
         });
     }
