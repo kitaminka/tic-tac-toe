@@ -1,5 +1,6 @@
 {
   "name": "tic-tac-toe",
+  "version": "1.0.0",
   "description": "Tic-tac-toe game with room system and authorization using Discord",
   "main": "app.js",
   "scripts": {
@@ -10,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/Kitaminka/TicTacToe.git"
   },
-  "author": "Kitaminka",
+  "author": "kitaminka",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Kitaminka/TicTacToe/issues"
