@@ -1,4 +1,4 @@
-# TicTacToe
+# tic-tac-toe
 Tic-tac-toe game with **room system** and authorization using **Discord**.
 ___
 ### Installation and launching
