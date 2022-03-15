@@ -4,7 +4,7 @@ ___
 ### Installation and launching
 - Clone the repository:
 ```bash
-git clone https://github.com/Kitaminka/TicTacToe.git
+git clone https://github.com/Kitaminka/tic-tac-toe.git
 ```
 - Install dependencies:
 ```bash
