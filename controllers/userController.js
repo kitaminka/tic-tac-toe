@@ -30,6 +30,7 @@ module.exports = {
             userInfo.nickname = `${userInfo.username}#${userInfo.discriminator}`;
             userInfo.accessToken = `${data.token_type} ${data.access_token}`;
             req.session.user = await this.updateUser(req, res, userInfo);
+            req.session.user.accessToken = userInfo.accessToken;
             return res.redirect('/game');
         } catch {
             return res.redirect('/');
@@ -38,7 +39,7 @@ module.exports = {
     async updateUser(req, res, user) {
         const result = await userModule.updateUser(user);
         if (!result) return this.creteUser(req, res, user);
-        else return result;
+        return result;
     },
     async updateUserInfo(req, res) {
         const user = await User.findOne({

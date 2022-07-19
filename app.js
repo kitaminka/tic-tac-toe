@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const app = express();
 const server = http.createServer(app);
-const io = require('socket.io')(server);
+const {Server} = require('socket.io');
+const io = new Server(server);
 
 require('./modules/socketModule')(io);
 require('dotenv').config();
@@ -31,9 +32,7 @@ const sessionMiddleware = session({
     store: MongoStore.create({
         mongoUrl: process.env.MONGO_URL,
         mongoOptions: {
-            retryWrites: true,
-            useNewUrlParser: true,
-            useUnifiedTopology: true
+            retryWrites: true
         }
     })
 });
@@ -59,3 +58,4 @@ app.use((req, res) => {
 });
 
 server.listen(process.env.PORT || '3000');
+console.log(`Server started on port ${process.env.PORT || '3000'}`);

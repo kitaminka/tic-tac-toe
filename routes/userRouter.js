@@ -6,7 +6,7 @@ const userRouter = express.Router();
 
 userRouter.get('/auth', (req, res) => {
     if (req.query.code) return userController.authUser(req, res);
-    else return res.status(400).send({
+    return res.status(400).send({
         success: false,
         error: 'Bad request'
     });
@@ -19,21 +19,21 @@ userRouter.get('/update', (req, res) => {
         success: false,
         error: 'Forbidden'
     });
-    else return userController.updateUserInfo(req, res);
+    return userController.updateUserInfo(req, res);
 });
 userRouter.get('/signout', (req, res) => {
     if (!req.session.user) return res.status(403).send({
         success: false,
         error: 'Forbidden'
     });
-    else return userController.signOut(req, res);
+    return userController.signOut(req, res);
 });
 userRouter.get('/:id', (req, res) => {
     if (!req.session.user) return res.status(403).send({
         success: false,
         error: 'Forbidden'
     });
-    else return userController.getUser(req, res);
+    return userController.getUser(req, res);
 });
 
 module.exports = userRouter;
