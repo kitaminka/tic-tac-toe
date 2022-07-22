@@ -18,7 +18,6 @@ const mainRouter = require('./routes/mainRouter');
 const gameRouter = require('./routes/gameRouter');
 
 mongoose.connect(process.env.MONGO_URL, {
-    retryWrites: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
