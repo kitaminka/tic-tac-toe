@@ -3,6 +3,11 @@ const User = require('../models/userModel.js');
 
 const rooms = new Map;
 const winPositions = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]];
+const gameStates = {
+    waiting: 0,
+    xTurn: 1,
+    oTurn: 2,
+}
 
 async function checkWin(turns, winPositions) {
     let correctTurns = 0;
@@ -26,7 +31,7 @@ module.exports = async (io) => {
     io.sockets.on('connection', async (socket) => {
         if (!rooms.get(socket.request.session.user.roomId)) {
             rooms.set(socket.request.session.user.roomId, {
-                gameState: 0,
+                gameState: gameStates.waiting,
                 xTurns: [],
                 oTurns: [],
                 roomId: socket.request.session.user.roomId,
@@ -48,12 +53,12 @@ module.exports = async (io) => {
                 nickname: socket.request.session.user.nickname,
                 avatar: socket.request.session.user.avatar
             };
-            roomInfo.gameState = 1;
+            roomInfo.gameState = gameStates.xTurn;
         }
 
         let roomInfo = rooms.get(socket.request.session.user.roomId);
 
-        if (roomInfo.gameState === 1) {
+        if (roomInfo.gameState === gameStates.xTurn) {
             io.emit('gameStart', roomInfo);
             io.emit('firstTurn', roomInfo);
         }
@@ -74,9 +79,9 @@ module.exports = async (io) => {
             if (![1, 2, 3, 4, 5, 6, 7, 8, 9].includes(moveInfo)) return;
             if (socket.request.session.user.id !== roomInfo.xPlayer.id && socket.request.session.user.id !== roomInfo.oPlayer.id) return;
             if (roomInfo.xTurns.includes(moveInfo) || roomInfo.oTurns.includes(moveInfo)) return;
-            if ((roomInfo.gameState === 1 && roomInfo.oPlayer.socket === socket.id) || (roomInfo.gameState === 2 && roomInfo.xPlayer.socket === socket.id)) return;
+            if ((roomInfo.gameState === gameStates.xTurn && roomInfo.xPlayer.socket !== socket.id) || (roomInfo.gameState === gameStates.oTurn && roomInfo.oPlayer.socket !== socket.id)) return;
 
-            if (roomInfo.gameState === 1) roomInfo.xTurns.push(moveInfo);
+            if (roomInfo.gameState === gameStates.xTurn) roomInfo.xTurns.push(moveInfo);
             else roomInfo.oTurns.push(moveInfo);
 
             io.emit('moveInfo', {
@@ -108,11 +113,11 @@ module.exports = async (io) => {
                 });
             }
 
-            if (roomInfo.gameState === 1) {
-                roomInfo.gameState = 2;
+            if (roomInfo.gameState === gameStates.xTurn) {
+                roomInfo.gameState = gameStates.oTurn;
                 return io.emit('secondTurn', roomInfo);
             } else {
-                roomInfo.gameState = 1;
+                roomInfo.gameState = gameStates.xTurn;
                 return io.emit('firstTurn', roomInfo);
             }
         });

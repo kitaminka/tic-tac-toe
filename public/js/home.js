@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 async function updateProfile () {
     const body = await fetch('/users/update', {
         method: 'GET'
